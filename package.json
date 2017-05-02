@@ -1,0 +1,29 @@
+{
+  "name": "ecfs-bot",
+  "version": "1.0.0",
+  "description": "a bot that calls the fcc ecfs so users can make comments to FCC",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/munadm/ECFS-bot.git"
+  },
+  "keywords": [
+    "messengerbot",
+    "bot",
+    "express"
+  ],
+  "author": "Munad Mahinoor",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/munadm/ECFS-bot/issues"
+  },
+  "homepage": "https://github.com/munadm/ECFS-bot#readme",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "request": "^2.81.0"
+  }
+}
