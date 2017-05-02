@@ -4,6 +4,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const request = require('request')
 const app = express()
+const token = process.env.FB_PAGE_ACCESS_TOKEN
 
 app.set('port', (process.env.PORT || 5000))
 
@@ -20,11 +21,36 @@ app.get('/', function (req, res) {
 
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
-	if (req.query['hub.verify_token'] === 'my_voice_is_my_password_verify_me') {
-		res.send(req.query['hub.challenge'])
-	}
-	res.send('Error, wrong token')
+	let messaging_events = req.body.entry[0].messaging;
+    for (let i = 0; i < messaging_events.length; i++) {
+	    let event = rmessaging_eventsi];
+	    let sender = event.sender.id;
+	    if (event.message && event.message.text) {
+		    let text = event.message.text;
+		    sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200));
+	    }
+    }
+    res.sendStatus(200);
 })
+
+function sendTextMessage(sender, text) {
+    let messageData = { text:text }
+    request({
+	    url: 'https://graph.facebook.com/v2.9/me/messages',
+	    qs: {access_token:token},
+	    method: 'POST',
+		json: {
+		    recipient: {id:sender},
+			message: messageData,
+		}
+	}, function(error, response, body) {
+		if (error) {
+		    console.log('Error sending messages: ', error)
+		} else if (response.body.error) {
+		    console.log('Error: ', response.body.error)
+	    }
+    })
+}
 
 // Spin up the server
 app.listen(app.get('port'), function() {
