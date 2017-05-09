@@ -1,8 +1,8 @@
 const express = require('express');
-const apiController = require('../app/controllers/api');
+const apiController = require('../controllers/api');
 
-const router = express.Router();
-router.get('/', apiController.tokenVerification);
-router.post('/', apiController.handleMessage);
+const fbRouter = express.Router();
+fbRouter.get('/', apiController.tokenVerification);
+fbRouter.post('/', apiController.handleMessage);
 
-module.export = router;
+module.exports = fbRouter;

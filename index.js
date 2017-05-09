@@ -2,7 +2,7 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const baseRoutes = require('./app/routes/base')
+const baseRoutes = require('./app/routes/baseRouter')
 const fbRoutes = require('./app/routes/fbRouter');
 
 const app = express();
@@ -15,7 +15,6 @@ app.use(bodyParser.urlencoded({extended: false}))
 
 // Process application/json
 app.use(bodyParser.json())
-app.use(logger('dev'));
 app.use(bodyParser.json());
 
 //Routes
