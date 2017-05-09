@@ -1,65 +1,26 @@
 'use strict'
 
-const express = require('express')
-const bodyParser = require('body-parser')
-const request = require('request')
-const app = express()
-const token = process.env.FB_PAGE_ACCESS_TOKEN
+const express = require('express');
+const bodyParser = require('body-parser');
+const baseRoutes = require('./app/routes/base')
+const fbRoutes = require('./app/routes/fbRouter');
 
-app.set('port', (process.env.PORT || 5000))
+const app = express();
+const token = process.env.FB_PAGE_ACCESS_TOKEN;
+
+app.set('port', (process.env.PORT || 5550))
 
 // Process application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}))
 
 // Process application/json
 app.use(bodyParser.json())
+app.use(logger('dev'));
+app.use(bodyParser.json());
 
-// Index route
-app.get('/', function (req, res) {
-	res.send('Hello world, I am a chat bot')
-})
-
-// for Facebook verification
-app.get('/webhook/', function (req, res) {
-	if (req.query['hub.verify_token'] === 'my_voice_is_my_password_verify_me') {
-		res.send(req.query['hub.challenge'])
-	}
-	res.send('Error, wrong token')
-})
-
-// for Facebook verification
-app.post('/webhook/', function (req, res) {
-	console.log(req.body.entry[0]);
-	let messaging_events = req.body.entry[0].messaging;
-    for (let i = 0; i < messaging_events.length; i++) {
-	    let event = messaging_events[i];
-	    let sender = event.sender.id;
-	    if (event.message && event.message.text) {
-		    let text = event.message.text;
-		    sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200));
-	    }
-    }
-    res.sendStatus(200);
-})
-
-function sendTextMessage(sender, text) {
-    let messageData = { text:text }
-    request({
-	    url: 'https://graph.facebook.com/v2.6/me/messages',
-	    qs: {access_token:token},
-	    method: 'POST',
-		json: {
-		    recipient: {id:sender},
-			message: messageData,
-		}
-	}, function(error, response, body) {
-		if (error) {
-		    console.log('Error sending messages: ', error)
-		} else if (response.body.error) {
-		    console.log('Error: ', response.body.error)
-	    }
-    })
-}
+//Routes
+app.use('/', baseRoutes);
+app.use('/webhook', fbRoutes);
 
 // Spin up the server
 app.listen(app.get('port'), function() {
