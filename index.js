@@ -6,7 +6,6 @@ const baseRoutes = require('./app/routes/baseRouter')
 const fbRoutes = require('./app/routes/fbRouter');
 
 const app = express();
-const token = process.env.FB_PAGE_ACCESS_TOKEN;
 
 app.set('port', (process.env.PORT || 5550))
 
