@@ -25,7 +25,8 @@ exports.handleMessage = function (req, res) {
  						handler.messageHandler(event,senderId);
  						break;
  					case event.postback:
- 						handler.postbackHandler(event);
+ 						handler.postbackHandler(event,senderId);
+ 						break;
  					default:
  						console.log(`Received unexpected event ${event}`);
  				}
