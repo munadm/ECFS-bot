@@ -1,4 +1,3 @@
-const request = require('request');
 const handler = require('../models/handler.js');
 const token = process.env.FB_PAGE_ACCESS_TOKEN;
 
