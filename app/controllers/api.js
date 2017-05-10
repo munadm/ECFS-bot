@@ -20,18 +20,14 @@ exports.handleMessage = function (req, res) {
  			let timeOfEvent = pageEntry.time;
  			pageEntry.messaging.forEach((event) =>{
  				let senderId = event.sender.id;
- 				switch(event){
- 					case event.message:
- 						handler.messageHandler(event,senderId);
- 						break;
- 					case event.postback:
- 						handler.postbackHandler(event,senderId);
- 						break;
- 					default:
- 						console.log(`Received unexpected event ${event}`);
+ 				if (event.message) {
+ 					handler.messageHandler(event,senderId);
+ 				} else if (event.postback) {
+ 					handler.postbackHandler(event,senderId);
+ 				} else {
+ 					console.log(`Received unexpected event ${event}`);
  				}
  			})
-
  		});
  	}
     res.sendStatus(200);
