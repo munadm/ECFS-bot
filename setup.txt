@@ -1,0 +1,30 @@
+The following are scripts that setup some of the app's components
+
+* * Persistent menu * *
+url=https://graph.facebook.com/v2.6/me/messenger_profile?access_token=
+data=
+"persistent_menu":[
+    {
+      "locale":"default",
+      "composer_input_disabled":false,
+      "call_to_actions":[
+        {
+          "title":"How we use your data.",
+          "type":"postback",
+          "payload":"FAQ_DATA_USE"
+         }
+      ]
+    }
+  ]
+
+* * Get Started Button * *
+url=https://graph.facebook.com/v2.6/me/thread_settings?access_token={TOKEN}
+data=
+{"setting_type":"call_to_actions",
+"thread_state": "new_thread",
+"call_to_actions":[
+    {
+      "payload":"GET_STARTED_PAYLOAD"
+    }
+  ]
+}

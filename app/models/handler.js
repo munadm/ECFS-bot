@@ -9,8 +9,12 @@ exports.messageHandler = (event, senderId) => {
 }
 
 exports.postbackHandler = (event, senderId) => {
-	if (event.postback.payload === 'GET_STARTED_PAYLOAD'){
-		sendTextMessage(senderId, "Great! To submit your comment we need some information. The information is deleted after you submit your comment.");
+	const payload = event.postback.payload;
+	if (payload === 'GET_STARTED_PAYLOAD') {
+		sendTextMessage(senderId, 'Great! To submit your comment we need some information. The information is deleted after you submit your comment.');
+	}
+	else if (payload === 'FAQ_DATA_USE') {
+		sendTextMessage(senderId, 'Great Question! Though we are storing your data in order to prepare your comment we will delete it right after you confirm to submit your comment.')
 	}
 }
 
