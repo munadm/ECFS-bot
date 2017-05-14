@@ -11,11 +11,25 @@ exports.messageHandler = (event, senderId) => {
 exports.postbackHandler = (event, senderId) => {
 	const payload = event.postback.payload;
 	if (payload === 'GET_STARTED_PAYLOAD') {
-		sendTextMessage(senderId, 'Great! To submit your comment we need some information. The information is deleted after you submit your comment.');
+		sendTextMessage(senderId, 'Welcome! Let\'s get started with some basic information.');
+		var userInfo = getUserInformation(senderId);
+		sendTextMessage(senderId, `Your name is ${userInfo.first_name} ${userInfo.last_name}. Is that correct?`);
 	}
 	else if (payload === 'FAQ_DATA_USE') {
 		sendTextMessage(senderId, 'Great Question! Though we are storing your data in order to prepare your comment we will delete it right after you confirm to submit your comment.')
 	}
+}
+
+function getUserInformation(senderId) {
+	const url = `https://graph.facebook.com/v2.6/${senderId}?fields=first_name,last_name&access_token=${token}`;
+	request(url, function (error, response, body) {
+  		if (!error && response.statusCode == 200) {
+    		return body;
+  		}
+  		else {
+  			console.log(`Error recieved: ${error}`);
+  		}
+	});
 }
 
 function sendTextMessage(sender, text) {
