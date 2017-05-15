@@ -13,6 +13,8 @@ exports.postbackHandler = (event, senderId) => {
 	if (payload === 'GET_STARTED_PAYLOAD') {
 		sendTextMessage(senderId, 'Welcome! Let\'s get started with some basic information.');
 		var userInfo = getUserInformation(senderId);
+		console.log(senderId);
+		console.log(userInfo);
 		sendTextMessage(senderId, `Your name is ${userInfo.first_name} ${userInfo.last_name}. Is that correct?`);
 	}
 	else if (payload === 'FAQ_DATA_USE') {
