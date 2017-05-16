@@ -39,7 +39,7 @@ function getUserInformation(senderId) {
 
 function sendTextMessage(sender, text) {
     let messageData = { text:text };
-    let userInfo = getUserInformation(sender).then((userInfo) =>  
+	getUserInformation(sender).then((userInfo) =>  
       { 
         console.log(`${userInfo.first_name} ${userInfo.last_name}. Is that correct?`); 
       }) 
