@@ -15,6 +15,7 @@ exports.postbackHandler = (event, senderId) => {
 		sendTextMessage(senderId, 'Welcome! Let\'s get started with some basic information.');
 		getUserInformation(senderId)
 		.then((userInfo) => { 
+			userInfo = JSON.parse(userInfo);
 	        sendTextMessage(senderId, `Your name is ${userInfo.first_name} ${userInfo.last_name}. Is that correct?`); 
 	      }) 
     	.catch((error) => { 
@@ -33,15 +34,6 @@ function getUserInformation(senderId) {
 
 function sendTextMessage(sender, text) {
     let messageData = { text:text };
-	getUserInformation(sender).then((userInfo) =>  
-      { 
-      	console.log('Promise Response : ' + userInfo);
-      	let parseUserInfo = JSON.parse(userInfo);
-        console.log(`${parseUserInfo.first_name} ${parseUserInfo.last_name}. Is that correct?`); 
-      }) 
-    .catch((error) => { 
-      console.log(`Error getting userInfo messages: ${error}`); 
-    }); 
     request({
 	    url: 'https://graph.facebook.com/v2.6/me/messages',
 	    qs: {access_token:token},
