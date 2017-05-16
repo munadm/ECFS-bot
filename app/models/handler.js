@@ -13,14 +13,8 @@ exports.postbackHandler = (event, senderId) => {
 	const payload = event.postback.payload;
 	if (payload === 'GET_STARTED_PAYLOAD') {
 		sendTextMessage(senderId, 'Welcome! Let\'s get started with some basic information.');
-		getUserInformation(senderId)
-		.then((userInfo) => 
-			{
-				sendTextMessage(senderId, `Your name is ${userInfo.first_name} ${userInfo.last_name}. Is that correct?`);
-			})
-		.catch((error) => {
-			console.log(`Error getting userInfo messages: ${error}`);
-		});
+		var userInfo = getUserInformation(senderId);
+		sendTextMessage(senderId, `Your name is ${userInfo.first_name} ${userInfo.last_name}. Is that correct?`);
 	}
 	else if (payload === 'FAQ_DATA_USE') {
 		sendTextMessage(senderId, 'Great Question! Though we are storing your data in order to prepare your comment we will delete it right after you confirm to submit your comment.')
@@ -39,14 +33,7 @@ function getUserInformation(senderId) {
 
 function sendTextMessage(sender, text) {
     let messageData = { text:text };
-    getUserInformation(sender)
-		.then((userInfo) => 
-			{
-				console.log(`${userInfo.first_name} ${userInfo.last_name}. Is that correct?`);
-			})
-		.catch((error) => {
-			console.log(`Error getting userInfo messages: ${error}`);
-		});
+    let userInfo = getUserInformation(sender)
     request({
 	    url: 'https://graph.facebook.com/v2.6/me/messages',
 	    qs: {access_token:token},
