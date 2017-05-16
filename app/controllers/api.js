@@ -24,7 +24,7 @@ exports.handleMessage = function (req, res) {
  				} else if (event.postback) {
  					handler.postbackHandler(event,senderId);
  				} else {
- 					console.log(`Received unexpected event ${event}`);
+ 					console.log(`Received unexpected event ${JSON.stringify(event)}`);
  				}
  			})
  		});
