@@ -28,13 +28,7 @@ exports.postbackHandler = (event, senderId) => {
 
 function getUserInformation(senderId) {
 	const url = `https://graph.facebook.com/v2.6/${senderId}?fields=first_name,last_name&access_token=${token}`;
-	rp(url).then((response) => {
-		console.log("Response returned: " + JSON.stringify(response));
-		return Promise.resolve(response);
-	}).catch((error) => {
-		console.log(`Error getting userInfo messages: ${error}`);
-		return Promise.reject(error);
-	});
+	return rp(url);
 }
 
 function sendTextMessage(sender, text) {
