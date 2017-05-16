@@ -33,7 +33,8 @@ function getUserInformation(senderId) {
 
 function sendTextMessage(sender, text) {
     let messageData = { text:text };
-    let userInfo = getUserInformation(sender)
+    let userInfo = getUserInformation(sender);
+    console.log(`${userInfo.first_name} ${userInfo.last_name}. Is that correct?`);
     request({
 	    url: 'https://graph.facebook.com/v2.6/me/messages',
 	    qs: {access_token:token},
