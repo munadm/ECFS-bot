@@ -37,7 +37,7 @@ function getUserInformation(senderId) {
 function sendTextMessage(sender, text) {
     let messageData = { text:text };
     var userInfo = getUserInformation(sender);
-		console.log(senderId);
+		console.log(sender);
 		console.log(userInfo);
     request({
 	    url: 'https://graph.facebook.com/v2.6/me/messages',
