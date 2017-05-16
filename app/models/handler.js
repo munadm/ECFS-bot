@@ -36,7 +36,8 @@ function sendTextMessage(sender, text) {
 	getUserInformation(sender).then((userInfo) =>  
       { 
       	console.log('Promise Response : ' + userInfo);
-        console.log(`${userInfo.first_name} ${userInfo.last_name}. Is that correct?`); 
+      	let parseUserInfo = JSON.parse(userInfo);
+        console.log(`${parseUserInfo.first_name} ${parseUserInfo.last_name}. Is that correct?`); 
       }) 
     .catch((error) => { 
       console.log(`Error getting userInfo messages: ${error}`); 
