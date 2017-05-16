@@ -41,7 +41,7 @@ function sendTextMessage(sender, text) {
     let messageData = { text:text };
     var userInfo = getUserInformation(sender);
 		console.log("SenderID " + sender);
-		console.log(userInfo);
+		console.log("Returned user " + JSON.stringify(userInfo.body);
     request({
 	    url: 'https://graph.facebook.com/v2.6/me/messages',
 	    qs: {access_token:token},
