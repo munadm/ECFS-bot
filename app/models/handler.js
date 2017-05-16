@@ -29,7 +29,7 @@ function getUserInformation(senderId) {
   			let str = JSON.stringify(response);
 			str = JSON.stringify(response, null, 4); // (Optional) beautiful indented output.
 			console.log("Response is " + str);
-    		return body;
+    		return response;
   		}
   		else {
   			console.log(`Error recieved: ${error}`);
