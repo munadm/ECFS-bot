@@ -26,6 +26,9 @@ function getUserInformation(senderId) {
 	const url = `https://graph.facebook.com/v2.6/${senderId}?fields=first_name,last_name&access_token=${token}`;
 	request(url, function (error, response, body) {
   		if (!error && response.statusCode == 200) {
+  			let str = JSON.stringify(response);
+			str = JSON.stringify(response, null, 4); // (Optional) beautiful indented output.
+			console.log("Response is " + str);
     		return body;
   		}
   		else {
@@ -37,7 +40,7 @@ function getUserInformation(senderId) {
 function sendTextMessage(sender, text) {
     let messageData = { text:text };
     var userInfo = getUserInformation(sender);
-		console.log(sender);
+		console.log("SenderID " + sender);
 		console.log(userInfo);
     request({
 	    url: 'https://graph.facebook.com/v2.6/me/messages',
