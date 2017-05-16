@@ -35,6 +35,7 @@ function sendTextMessage(sender, text) {
     let messageData = { text:text };
 	getUserInformation(sender).then((userInfo) =>  
       { 
+      	console.log('Promise Response : ' + userInfo);
         console.log(`${userInfo.first_name} ${userInfo.last_name}. Is that correct?`); 
       }) 
     .catch((error) => { 
@@ -50,7 +51,7 @@ function sendTextMessage(sender, text) {
 		}
 	}, function(error, response, body) {
 		if (error) {
-		    console.log(`Error sending messages: ${error}`);
+		    console.log(`Error sending messages: ${JOSN.stringify(error)}`);
 		} else if (response.body.error) {
 		    console.log(`Error: ${response.body.error}`);
 	    }
