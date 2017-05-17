@@ -47,7 +47,7 @@ function getUserInformation(senderId) {
 	return rp(url);
 }
 
-function sendQuickReply(sender, title, options) {
+function sendQuickReply(sender, messageItem, options) {
 	let optionsData = [];
 	for (item in options) {
 		optionsData.push({
@@ -64,7 +64,7 @@ function sendQuickReply(sender, title, options) {
 	    json: {
 	    	recipient: {id:sender},
 	    	message: {
-	    		text: title,
+	    		text: messageItem,
 	    		quick_replies: optionsData
 
 	    	}
@@ -73,7 +73,7 @@ function sendQuickReply(sender, title, options) {
 		if (error) {
 		    console.log(`Error sending messages: ${JOSN.stringify(error)}`);
 		} else if (response.body.error) {
-		    console.log(`Error: ${response.body.error}`);
+		    console.log(`Error: ${JSON.stringify(response.body.error)}`);
 	    }
 	});
 }
@@ -92,7 +92,7 @@ function sendTextMessage(sender, text) {
 		if (error) {
 		    console.log(`Error sending messages: ${JOSN.stringify(error)}`);
 		} else if (response.body.error) {
-		    console.log(`Error: ${response.body.error}`);
+		    console.log(`Error: ${JSON.stringify(response.body.error)}`);
 	    }
     });
 }
