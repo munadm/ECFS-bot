@@ -17,7 +17,8 @@ exports.handleMessage = function (req, res) {
  		data.entry.forEach( (pageEntry) => {
  			let pageID = pageEntry.id;
  			let timeOfEvent = pageEntry.time;
- 			pageEntry.messaging.forEach((event) =>{
+ 			pageEntry.messaging.forEach((event) => {
+ 				console.log(JSON.stringify(event));
  				let senderId = event.sender.id;
  				if (event.message && event.message.quick_reply) {
  					handler.quickReplyHandler(event,senderId);
