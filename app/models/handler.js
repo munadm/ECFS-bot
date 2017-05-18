@@ -4,7 +4,12 @@ const token = process.env.FB_PAGE_ACCESS_TOKEN;
 
 exports.messageHandler = (event, senderId) => {
 	if (event.message.text) {
-		let responseText = event.message.text.substring(0, 200)
+		let responseText = event.message.text.substring(0, 200);
+		const replyOptions = {
+			yes : 'CORRECT_NAME',
+			no : 'INCORRECT_NAME',
+		};
+		sendQuickReply(senderId,'Message recieved?', replyOptions);
 		sendTextMessage(senderId, `Text received, echo: ${responseText}`);
 	}
 }
@@ -56,19 +61,22 @@ function sendQuickReply(sender, messageItem, options) {
 			payload : options[item],
 		});
 	}
-	console.log(JSON.stringify(optionsData));
-	request({
-		url: 'https://graph.facebook.com/v2.6/me/messages',
-	    qs: {access_token:token},
-	    method: 'POST',
-	    json: {
-	    	recipient: {id:sender},
-	    	message: {
+	console.log('Options data ' + JSON.stringify(optionsData));
+	let requestData = {
+		recipient: {id:sender},
+		message: {
 	    		text: messageItem,
 	    		quick_replies: optionsData
 
 	    	}
 	    }
+	};
+	console.log(JSON.stringify(requestData));
+	request({
+		url: 'https://graph.facebook.com/v2.6/me/messages',
+	    qs: {access_token:token},
+	    method: 'POST',
+	    json: requestData
 	}, function(error, response, body) {
 		if (error) {
 		    console.log(`Error sending messages: ${JOSN.stringify(error)}`);
