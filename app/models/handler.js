@@ -5,11 +5,6 @@ const token = process.env.FB_PAGE_ACCESS_TOKEN;
 exports.messageHandler = (event, senderId) => {
 	if (event.message.text) {
 		let responseText = event.message.text.substring(0, 200);
-		const replyOptions = {
-			yes : 'CORRECT_NAME',
-			no : 'INCORRECT_NAME',
-		};
-		sendQuickReply(senderId,'Message recieved?', replyOptions);
 		sendTextMessage(senderId, `Text received, echo: ${responseText}`);
 	}
 }
@@ -29,12 +24,22 @@ exports.postbackHandler = (event, senderId) => {
 	}
 	else if (payload === 'FAQ_DATA_USE') {
 		sendTextMessage(senderId, 'Great Question! Though we are storing your data in order to prepare your comment we will delete it right after you confirm to submit your comment.')
+	} else {
+		console.log(`Recieved unexpected payload ${payload}`)
 	}
-	else if(payload === 'CORRECT_NAME') {
+}
+
+exports.quickReplyHandler = (event, senderId) => {
+	const payload = event.payload;
+	console.log(JSON.Stringify(payload));
+	if(payload === 'CORRECT_NAME') {
 		sendTextMessage(senderId, 'Great!');
 	}
 	else if(payload === 'INCORRECT_NAME') {
 		sendTextMessage(senderId, 'Darn :(');
+	}
+	else {
+		console.log(`Recieved unexpected payload ${JSON.stringify(payload)}`)
 	}
 }
 
@@ -70,7 +75,6 @@ function sendQuickReply(sender, messageItem, options) {
 
 	    	}
 	};
-	console.log(JSON.stringify(requestData));
 	request({
 		url: 'https://graph.facebook.com/v2.6/me/messages',
 	    qs: {access_token:token},

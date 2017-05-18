@@ -19,7 +19,9 @@ exports.handleMessage = function (req, res) {
  			let timeOfEvent = pageEntry.time;
  			pageEntry.messaging.forEach((event) =>{
  				let senderId = event.sender.id;
- 				if (event.message) {
+ 				if (event.message & event.message.quick_reply) {
+ 					handler.quickReplyHandler(event,senderId);
+ 				} else if (event.message) {
  					handler.messageHandler(event,senderId);
  				} else if (event.postback) {
  					handler.postbackHandler(event,senderId);
