@@ -69,7 +69,6 @@ function sendQuickReply(sender, messageItem, options) {
 	    		quick_replies: optionsData
 
 	    	}
-	    }
 	};
 	console.log(JSON.stringify(requestData));
 	request({
@@ -84,7 +83,7 @@ function sendQuickReply(sender, messageItem, options) {
 		    console.log(`Error: ${JSON.stringify(response.body.error)}`);
 	    }
 	});
-}
+};
 
 function sendTextMessage(sender, text) {
     let messageData = { text:text };
