@@ -31,7 +31,7 @@ exports.postbackHandler = (event, senderId) => {
 
 exports.quickReplyHandler = (event, senderId) => {
 	const payload = event.message.quick_reply.payload;
-	console.log(JSON.stringify(payload));
+	console.log(`Sender with id ${senderId} sent payload ${JSON.stringify(payload)}`);
 	if(payload === 'CORRECT_NAME') {
 		sendTextMessage(senderId, 'Great!');
 	}
