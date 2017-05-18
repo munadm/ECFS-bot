@@ -45,8 +45,8 @@ exports.quickReplyHandler = (event, senderId) => {
 
 function InitializeConversation(userInfo, senderId) {
 	const replyOptions = {
-		yes : 'CORRECT_NAME',
-		no : 'INCORRECT_NAME',
+		Yes : 'CORRECT_NAME',
+		No : 'INCORRECT_NAME',
 	};
 	const message = `Your name is ${userInfo.first_name} ${userInfo.last_name}. Is that correct?`;
 	sendQuickReply(senderId, message, replyOptions);
