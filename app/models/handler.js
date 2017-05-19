@@ -5,8 +5,7 @@ const token = process.env.FB_PAGE_ACCESS_TOKEN;
 exports.messageHandler = (event, senderId) => {
 	if (event.message.text) {
 		let responseText = event.message.text.substring(0, 200);
-		//sendTextMessage(senderId, `Text received, echo: ${responseText}`);
-		InitializeConversation(senderId);
+		sendTextMessage(senderId, `Text received, echo: ${responseText}`);
 	}
 }
 
