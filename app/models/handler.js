@@ -46,7 +46,7 @@ function InitializeConversation(senderId) {
 	getUserInformation(senderId)
 		.then((response) => { 
 			response = JSON.parse(response);
-			userInfo = response;InitializeConversation(senderId, userInfo);
+			userInfo = response;
 	      }) 
     	.catch((error) => { 
       		console.log(`Error getting userInfo messages: ${error}`); 
