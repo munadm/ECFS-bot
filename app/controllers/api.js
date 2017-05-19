@@ -21,7 +21,6 @@ exports.handleMessage = function (req, res) {
  				console.log(JSON.stringify(event));
  				let senderId = event.sender.id;
  				if (event.message && event.message.quick_reply) {
- 					console.log("At Quick Reply handler");
  					handler.quickReplyHandler(event,senderId);
  				} else if (event.message) {
  					handler.messageHandler(event,senderId);
