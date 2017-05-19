@@ -1,4 +1,4 @@
-FCC ECFS messenger bot for the "Restoring Electronic Proposal"
+FCC ECFS messenger bot for the "Restoring Electronic Freedom Proposal"
 ==========================================================
 This is a simple facebook chat bot that allows the everyday facebook user to comment on the "Restoring Electronic Proposal"
 

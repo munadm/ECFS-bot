@@ -5,22 +5,15 @@ const token = process.env.FB_PAGE_ACCESS_TOKEN;
 exports.messageHandler = (event, senderId) => {
 	if (event.message.text) {
 		let responseText = event.message.text.substring(0, 200);
-		sendTextMessage(senderId, `Text received, echo: ${responseText}`);
+		//sendTextMessage(senderId, `Text received, echo: ${responseText}`);
+		InitializeConversation(senderId);
 	}
 }
 
 exports.postbackHandler = (event, senderId) => {
 	const payload = event.postback.payload;
 	if (payload === 'GET_STARTED_PAYLOAD') {
-		sendTextMessage(senderId, 'Welcome! Let\'s get started with some basic information.');
-		getUserInformation(senderId)
-		.then((userInfo) => { 
-			userInfo = JSON.parse(userInfo);
-			InitializeConversation(senderId, userInfo);
-	      }) 
-    	.catch((error) => { 
-      		console.log(`Error getting userInfo messages: ${error}`); 
-    	});
+		InitializeConversation(senderId);
 	}
 	else if (payload === 'FAQ_DATA_USE') {
 		sendTextMessage(senderId, 'Great Question! Though we are storing your data in order to prepare your comment we will delete it right after you confirm to submit your comment.')
@@ -43,11 +36,21 @@ exports.quickReplyHandler = (event, senderId) => {
 	}
 }
 
-function InitializeConversation(userInfo, senderId) {
+function InitializeConversation(senderId) {
 	const replyOptions = {
 		Yes : 'CORRECT_NAME',
 		No : 'INCORRECT_NAME',
 	};
+	let userInfo = null;
+	sendTextMessage(senderId, 'Welcome! Let\'s get started with some basic information.');
+	getUserInformation(senderId)
+		.then((response) => { 
+			response = JSON.parse(response);
+			userInfo = response;InitializeConversation(senderId, userInfo);
+	      }) 
+    	.catch((error) => { 
+      		console.log(`Error getting userInfo messages: ${error}`); 
+    	});
 	const message = `Your name is ${userInfo.first_name} ${userInfo.last_name}. Is that correct?`;
 	sendQuickReply(senderId, message, replyOptions);
 }
@@ -72,7 +75,6 @@ function sendQuickReply(sender, messageItem, options) {
 		message: {
 	    		text: messageItem,
 	    		quick_replies: optionsData
-
 	    	}
 	};
 	request({
