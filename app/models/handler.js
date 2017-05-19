@@ -41,18 +41,16 @@ function InitializeConversation(senderId) {
 		Yes : 'CORRECT_NAME',
 		No : 'INCORRECT_NAME',
 	};
-	let userInfo = null;
 	sendTextMessage(senderId, 'Welcome! Let\'s get started with some basic information.');
 	getUserInformation(senderId)
 		.then((response) => { 
-			response = JSON.parse(response);
-			userInfo = response;
+			const userInfo = JSON.parse(response);
+			const message = `Your name is ${userInfo.first_name} ${userInfo.last_name}. Is that correct?`;
+			sendQuickReply(senderId, message, replyOptions);
 	      }) 
     	.catch((error) => { 
       		console.log(`Error getting userInfo messages: ${error}`); 
     	});
-	const message = `Your name is ${userInfo.first_name} ${userInfo.last_name}. Is that correct?`;
-	sendQuickReply(senderId, message, replyOptions);
 }
 
 function getUserInformation(senderId) {
