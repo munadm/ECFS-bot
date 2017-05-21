@@ -1,6 +1,6 @@
-const request = require('request');
 const rp = require('request-promise');
 const fb = require('../middleware/facebook.js')
+const cv = require('./conversation.js');
 const token = process.env.FB_PAGE_ACCESS_TOKEN;
 
 exports.messageHandler = (event, senderId) => {
@@ -13,10 +13,10 @@ exports.messageHandler = (event, senderId) => {
 exports.postbackHandler = (event, senderId) => {
 	const payload = event.postback.payload;
 	if (payload === 'GET_STARTED_PAYLOAD') {
-		InitializeConversation(senderId);
+		cv.initializeConversation(senderId);
 	}
 	else if (payload === 'FAQ_DATA_USE') {
-		sendTextMessage(senderId, 'Great Question! Though we are storing your data in order to prepare your comment we will delete it right after you confirm to submit your comment.')
+		fb.sendTextMessage(senderId, 'Great Question! Though we are storing your data in order to prepare your comment we will delete it right after you confirm to submit your comment.')
 	} else {
 		console.log(`Recieved unexpected payload ${payload}`)
 	}
@@ -26,34 +26,13 @@ exports.quickReplyHandler = (event, senderId) => {
 	const payload = event.message.quick_reply.payload;
 	console.log(`Sender with id ${senderId} sent payload ${JSON.stringify(payload)}`);
 	if(payload === 'CORRECT_NAME') {
-		fb.sendTextMessage(senderId, 'Great!');
+		cv.nameIsCorrect(senderId);
 	}
 	else if(payload === 'INCORRECT_NAME') {
-		fb.sendTextMessage(senderId, 'Darn :(');
+		cv.nameIsIncorrect(senderId);
 	}
 	else {
 		console.log(`Recieved unexpected payload ${JSON.stringify(payload)}`)
 	}
 }
 
-function InitializeConversation(senderId) {
-	const replyOptions = {
-		Yes : 'CORRECT_NAME',
-		No : 'INCORRECT_NAME',
-	};
-	sendTextMessage(senderId, 'Welcome! Let\'s get started with some basic information.');
-	getUserInformation(senderId)
-		.then((response) => { 
-			const userInfo = JSON.parse(response);
-			const message = `Your name is ${userInfo.first_name} ${userInfo.last_name}. Is that correct?`;
-			fb.sendQuickReply(senderId, message, replyOptions);
-	      }) 
-    	.catch((error) => { 
-      		console.log(`Error getting userInfo messages: ${error}`); 
-    	});
-};
-
-function getUserInformation(senderId) {
-	const url = `https://graph.facebook.com/v2.6/${senderId}?fields=first_name,last_name&access_token=${token}`;
-	return rp(url);
-};
