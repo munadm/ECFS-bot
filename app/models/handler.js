@@ -1,4 +1,3 @@
-const rp = require('request-promise');
 const fb = require('../middleware/facebook.js')
 const cv = require('./conversation.js');
 

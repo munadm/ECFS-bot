@@ -1,3 +1,4 @@
+const rp = require('request-promise');
 const fb = require('../middleware/facebook.js');
 const User = require('../models/user.js');
 const token = process.env.FB_PAGE_ACCESS_TOKEN;
