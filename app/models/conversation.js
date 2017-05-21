@@ -36,7 +36,7 @@ exports.nameIsCorrect = (senderId) => {
     				return;
     			}
     			console.log(`${result}`);
-    			fb.sendMessage('Great, thanks!');
+    			fb.sendTextMessage('Great, thanks!');
     		});
 	      })
     	.catch((error) => { 
@@ -45,7 +45,7 @@ exports.nameIsCorrect = (senderId) => {
 }
 
 exports.nameIsIncorrect = (senderId) => {
-	fb.sendMessage('Aww Bummer!');
+	fb.sendTextMessage('Aww Bummer!');
 }
 
 function getUserInformation(senderId) {
