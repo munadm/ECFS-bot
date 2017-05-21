@@ -1,7 +1,6 @@
 const rp = require('request-promise');
 const fb = require('../middleware/facebook.js')
 const cv = require('./conversation.js');
-const token = process.env.FB_PAGE_ACCESS_TOKEN;
 
 exports.messageHandler = (event, senderId) => {
 	if (event.message.text) {
