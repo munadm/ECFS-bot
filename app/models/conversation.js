@@ -1,6 +1,8 @@
 const rp = require('request-promise');
 const fb = require('../middleware/facebook.js');
-const User = require('../models/user.js');
+const sh = require('../controllers/stateHandler.js');
+const State = require('./state.js');
+const User = require('./user.js');
 const token = process.env.FB_PAGE_ACCESS_TOKEN;
 
 exports.initializeConversation = (senderId) => {
@@ -8,6 +10,7 @@ exports.initializeConversation = (senderId) => {
 		Yes : 'CORRECT_NAME',
 		No : 'INCORRECT_NAME',
 	};
+	sh.clearState(senderId);
 	fb.sendTextMessage(senderId, 'Welcome! Let\'s get started with some basic information.');
 	getUserInformation(senderId)
 		.then((response) => { 
@@ -21,22 +24,22 @@ exports.initializeConversation = (senderId) => {
 };
 
 exports.nameIsCorrect = (senderId) => {
+	const replyOptions = {
+		Yes : 'IN_US',
+		No : 'NOT_IN_US',
+	};
 	getUserInformation(senderId)
-		.then((response) => { 
+		.then((response) => {
 			const userInfo = JSON.parse(response);
-			const query = { fb_id: senderId };
-			const update = { first_name: userInfo.first_name,
-							 last_name: userInfo.last_name, };
-    		const options = { upsert: true,
-    						  new: true,
-    						  setDefaultsOnInsert: true };
-    		User.findOneAndUpdate(query, update, options, (error, result) => {
-    			if (error) {
-    				console.log(`Recieved error,creating or updating model ${JSON.stringify(error)}`);
-    				return;
-    			}
-    			console.log(`${result}`);
-    			fb.sendTextMessage('Great, thanks!');
+			const userName = userInfo.first_name + ' ' + userInfo.last_name;
+			const update = { name: userName };
+    		sh.updateUser(senderId, update).then((result) =>{
+    			sh.updateState(senderId, 'name');
+    			const message = `Do you live in the United States?`;
+				fb.sendQuickReply(senderId, message, replyOptions);
+    		})
+    		.catch((error) => {
+    			console.log(`Recieved error,creating or updating model ${JSON.stringify(error)}`);
     		});
 	      })
     	.catch((error) => { 
@@ -45,7 +48,23 @@ exports.nameIsCorrect = (senderId) => {
 }
 
 exports.nameIsIncorrect = (senderId) => {
-	fb.sendTextMessage('Aww Bummer!');
+	fb.sendTextMessage('Please enter your first name and last name.');
+}
+
+exports.userInUS = (senderId) => {
+	fb.sendTextMessage(senderId, 'Enter your street address, don\'t enter city, state and zip.');
+}
+
+exports.userNotInUS = (senderId) => {
+	const update = { isInternational: true };
+	sh.updateUser(senderId, update).then((result) =>{
+		sh.updateState(senderId, 'city');
+		sh.updateState(senderId, 'state');
+		fb.sendTextMessage(senderId, 'Enter your full address.');
+	})
+	.catch((error) => {
+		console.log(`Recieved error,creating or updating model ${JSON.stringify(error)}`);
+	});
 }
 
 function getUserInformation(senderId) {

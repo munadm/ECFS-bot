@@ -3,8 +3,12 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
   fb_id: { type: String, required: true, unique: true },
-  first_name: String,
-  last_name: String,
+  name: String,
+  adresss: String,
+  zip: { type: String, maxlength: 9 },
+  city: String,
+  state: String,
+  isInternational: { type: Boolean, default: false },
   created_at: Date,
   updated_at: Date
 });
@@ -21,7 +25,6 @@ userSchema.pre('update', function(next) {
   // if created_at doesn't exist, add to that field
   if (!this.created_at)
     this.created_at = currentDate;
-
   next();
 });
 
