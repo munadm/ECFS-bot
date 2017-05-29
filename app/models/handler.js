@@ -10,8 +10,9 @@ exports.messageHandler = (event, senderId) => {
 				console.log(`Error encountered getting state: ${JSON.stringify(error)}`);
 				return;
 			}
+			console.log(`State is ${state}`);
 			if(state) {
-				sh.handleState(event.message.text, senderId, stage);
+				sh.handleState(event.message.text, senderId, state);
 			} else {
 				cv.initializeConversation(senderId);
 			}

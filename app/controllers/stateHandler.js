@@ -4,9 +4,9 @@ const fb = require('../middleware/facebook.js');
 const State = require('../models/state.js');
 const User = require('../models/user.js');
 
-exports.handleState = (message, senderId, stage) => {
+exports.handleState = (message, senderId, state) => {
 	let update = {};
-	if(!stage.name && message) {
+	if(!state.name && message) {
 		if (message.length > 255) {
 			fb.sendTextMessage(`Seems like you entered invalid input. Please enter the first and last name.`);
 			return;
@@ -23,7 +23,7 @@ exports.handleState = (message, senderId, stage) => {
 			fb.sendQuickReply(senderId, message, replyOptions);
 		}).catch((error) => { console.log(`Error updating user name: ${JSON.stringify(error)}`); });
 
-	} else if(!stage.address) {
+	} else if(!state.address) {
 		update = { address: message };
 		updateUser(senderId, update)
 		.then((result) => {
@@ -43,7 +43,7 @@ exports.handleState = (message, senderId, stage) => {
 			});			
 		}).catch((error) => { console.log(`Error updating user address: ${JSON.stringify(error)}`); });
 
-	} else if(!stage.city) {
+	} else if(!state.city) {
 		update = { city: message };
 		updateUser(senderId, update)
 		.then((result) => {
@@ -51,7 +51,7 @@ exports.handleState = (message, senderId, stage) => {
 			fb.sendTextMessage('Enter the state you reside in, using the abbreviated form (ex. CA for California).');
 		}).catch((error) => { console.log(`Error updating user city: ${JSON.stringify(error)}`); });
 
-	} else if(!stage.state && message) {
+	} else if(!state.state && message) {
 		if(!isValidState(message)) {
 			fb.sendTextMessage(`I'm sorry we only support US addresses with 5 digit zip codes.`);
 			return;
@@ -63,7 +63,7 @@ exports.handleState = (message, senderId, stage) => {
 			fb.sendTextMessage('Enter your zip code.');
 		}).catch((error) => { console.log(`Error updating user state: ${JSON.stringify(error)}`); });
 
-	} else if(!stage.zip && message) {
+	} else if(!state.zip && message) {
 		if(!isValidZip(message)) {
 			fb.sendTextMessage(`I'm sorry we only support US addresses with a 5 digit zip code.`);
 			return;
@@ -74,12 +74,12 @@ exports.handleState = (message, senderId, stage) => {
 			exports.updateState(senderId, 'zip');
 			fb.sendTextMessage('');
 		}).catch((error) => { console.log(`Error updating user zip: ${JSON.stringify(error)}`); });
-	} else if(!stage.comment) {
+	} else if(!state.comment) {
 		update = { comment: message };
 		updateUser(senderId, update)
 		.then((result) => {
 			exports.updateState(senderId, 'comment');
-			cv.finalizeConveration(senderId);
+			fb.sendTextMessage('All Done!');
 		}).catch((error) => { console.log(`Error updating user zip: ${JSON.stringify(error)}`); });
 
 	} else {
