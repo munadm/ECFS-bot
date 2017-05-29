@@ -12,7 +12,7 @@ exports.handleState = (message, senderId, state) => {
 			return;
 		}
 		update = { name: message };
-		updateUser(senderId, update)
+		exports.updateUser(senderId, update)
 		.then((result) => {
 			exports.updateState(senderId, 'name');
 			const replyOptions = {
@@ -25,7 +25,7 @@ exports.handleState = (message, senderId, state) => {
 
 	} else if(!state.address) {
 		update = { address: message };
-		updateUser(senderId, update)
+		exports.updateUser(senderId, update)
 		.then((result) => {
 			exports.updateState(senderId, 'address');
 			query = { fb_id: senderId };
@@ -45,7 +45,7 @@ exports.handleState = (message, senderId, state) => {
 
 	} else if(!state.city) {
 		update = { city: message };
-		updateUser(senderId, update)
+		exports.updateUser(senderId, update)
 		.then((result) => {
 			exports.updateState(senderId, 'city');
 			fb.sendTextMessage('Enter the state you reside in, using the abbreviated form (ex. CA for California).');
@@ -57,7 +57,7 @@ exports.handleState = (message, senderId, state) => {
 			return;
 		}
 		update = { state: message };
-		updateUser(senderId, update)
+		exports.updateUser(senderId, update)
 		.then((result) => {
 			exports.updateState(senderId, 'state');
 			fb.sendTextMessage('Enter your zip code.');
@@ -69,14 +69,14 @@ exports.handleState = (message, senderId, state) => {
 			return;
 		}
 		update = { zip: message };
-		updateUser(senderId, update)
+		exports.updateUser(senderId, update)
 		.then((result) => {
 			exports.updateState(senderId, 'zip');
 			fb.sendTextMessage('');
 		}).catch((error) => { console.log(`Error updating user zip: ${JSON.stringify(error)}`); });
 	} else if(!state.comment) {
 		update = { comment: message };
-		updateUser(senderId, update)
+		exports.updateUser(senderId, update)
 		.then((result) => {
 			exports.updateState(senderId, 'comment');
 			fb.sendTextMessage('All Done!');
