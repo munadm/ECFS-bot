@@ -1,3 +1,4 @@
+const _ = require('underscore');
 const constants = require('../../config/constants.js');
 const cv = require('../models/conversation.js')
 const fb = require('../middleware/facebook.js');
@@ -100,7 +101,7 @@ function isValidState(state) {
 }
 
 function isValidZip(zip) {
-	if(zip.length > 5 || isFinite(zip) || (parseInt( myInteger ) < 0)) {
+	if(zip.length > 5 || isFinite(zip) || (parseInt(myInteger) < 0)) {
 		return false;
 	}
 	return true;
