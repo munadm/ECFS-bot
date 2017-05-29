@@ -1,3 +1,5 @@
+const constants = require('../../config/constants.js');
+const cv = require('../models/conversation.js')
 const fb = require('../middleware/facebook.js');
 const State = require('../models/state.js');
 const User = require('../models/user.js');
@@ -46,10 +48,14 @@ exports.handleState = (message, senderId, stage) => {
 		updateUser(senderId, update)
 		.then((result) => {
 			exports.updateState(senderId, 'city');
-			fb.sendTextMessage('Enter the state you reside in.');
+			fb.sendTextMessage('Enter the state you reside in, using the abbreviated form (ex. CA for California).');
 		}).catch((error) => { console.log(`Error updating user city: ${JSON.stringify(error)}`); });
 
-	} else if(!stage.state) {
+	} else if(!stage.state && message) {
+		if(!isValidState(message)) {
+			fb.sendTextMessage(`I'm sorry we only support US addresses with 5 digit zip codes.`);
+			return;
+		}
 		update = { state: message };
 		updateUser(senderId, update)
 		.then((result) => {
@@ -59,7 +65,7 @@ exports.handleState = (message, senderId, stage) => {
 
 	} else if(!stage.zip && message) {
 		if(!isValidZip(message)) {
-			fb.sendTextMessage(`I'm sorry we only support US addresses with 5 digit zip codes.`);
+			fb.sendTextMessage(`I'm sorry we only support US addresses with a 5 digit zip code.`);
 			return;
 		}
 		update = { zip: message };
@@ -73,13 +79,23 @@ exports.handleState = (message, senderId, stage) => {
 		updateUser(senderId, update)
 		.then((result) => {
 			exports.updateState(senderId, 'comment');
-			fb.sendTextMessage('Please enter your comment below.');
+			cv.finalizeConveration(senderId);
 		}).catch((error) => { console.log(`Error updating user zip: ${JSON.stringify(error)}`); });
 
 	} else {
-
+		fb.sendTextMessage('We ran into some issues processing your input. Please try again.');
 	}
+}
 
+function isValidState(state) {
+	if(state.length > 2) {
+		return false;
+	}
+	const searchableState = state.ToUpper();
+	if(!(_.contains(constants.states, searchableState)) ) {
+		return false;
+	}
+	return true;
 }
 
 function isValidZip(zip) {
