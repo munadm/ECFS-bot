@@ -92,7 +92,7 @@ function isValidState(state) {
 	if(state.length > 2) {
 		return false;
 	}
-	const searchableState = state.ToUpper();
+	const searchableState = state.toUpperCase();
 	if(!(_.contains(constants.states, searchableState)) ) {
 		return false;
 	}
