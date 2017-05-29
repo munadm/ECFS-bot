@@ -29,13 +29,14 @@ exports.handleState = (message, senderId, state) => {
 		.then((result) => {
 			exports.updateState(senderId, 'address');
 			query = { fb_id: senderId };
-			User.findOne(query, (error, result) => {
+			User.findOne(query, (error, user) => {
 				if (error) {
 					console.log(`Recieved finding user ${JSON.stringify(error)}`);
 					return;
 				}
+				console.log(`Result is: ${user}`);
 
-				if(result.isInternational === true) {
+				if(user.isInternational === true) {
 					fb.sendTextMessage('Please enter your comment below.');
 				} else {
 					fb.sendTextMessage('Enter the city you reside in.');
