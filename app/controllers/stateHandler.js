@@ -101,7 +101,7 @@ function isValidState(state) {
 }
 
 function isValidZip(zip) {
-	if(zip.length > 5 || !isFinite(zip) || (parseInt(myInteger) < 0)) {
+	if(zip.length > 5 || !isFinite(zip) || (parseInt(zip) < 0)) {
 		return false;
 	}
 	return true;
