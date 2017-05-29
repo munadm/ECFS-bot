@@ -8,7 +8,7 @@ exports.handleState = (message, senderId, state) => {
 	let update = {};
 	if(!state.name && message) {
 		if (message.length > 255) {
-			fb.sendTextMessage(`Seems like you entered invalid input. Please enter the first and last name.`);
+			fb.sendTextMessage(senderId, `Seems like you entered invalid input. Please enter the first and last name.`);
 			return;
 		}
 		update = { name: message };
@@ -37,9 +37,9 @@ exports.handleState = (message, senderId, state) => {
 				console.log(`Result is: ${user}`);
 
 				if(user.isInternational === true) {
-					fb.sendTextMessage('Please enter your comment below.');
+					fb.sendTextMessage(senderId, 'Please enter your comment below.');
 				} else {
-					fb.sendTextMessage('Enter the city you reside in.');
+					fb.sendTextMessage(senderId, 'Enter the city you reside in.');
 				}
 			});			
 		}).catch((error) => { console.log(`Error updating user address: ${JSON.stringify(error)}`); });
@@ -49,42 +49,42 @@ exports.handleState = (message, senderId, state) => {
 		exports.updateUser(senderId, update)
 		.then((result) => {
 			exports.updateState(senderId, 'city');
-			fb.sendTextMessage('Enter the state you reside in, using the abbreviated form (ex. CA for California).');
+			fb.sendTextMessage(senderId, 'Enter the state you reside in, using the abbreviated form (ex. CA for California).');
 		}).catch((error) => { console.log(`Error updating user city: ${JSON.stringify(error)}`); });
 
 	} else if(!state.state && message) {
 		if(!isValidState(message)) {
-			fb.sendTextMessage(`I'm sorry we only support US addresses with 5 digit zip codes.`);
+			fb.sendTextMessage(senderId, `I'm sorry we only support US addresses with 5 digit zip codes.`);
 			return;
 		}
 		update = { state: message };
 		exports.updateUser(senderId, update)
 		.then((result) => {
 			exports.updateState(senderId, 'state');
-			fb.sendTextMessage('Enter your zip code.');
+			fb.sendTextMessage(senderId, 'Enter your zip code.');
 		}).catch((error) => { console.log(`Error updating user state: ${JSON.stringify(error)}`); });
 
 	} else if(!state.zip && message) {
 		if(!isValidZip(message)) {
-			fb.sendTextMessage(`I'm sorry we only support US addresses with a 5 digit zip code.`);
+			fb.sendTextMessage(senderId, `I'm sorry we only support US addresses with a 5 digit zip code.`);
 			return;
 		}
 		update = { zip: message };
 		exports.updateUser(senderId, update)
 		.then((result) => {
 			exports.updateState(senderId, 'zip');
-			fb.sendTextMessage('');
+			fb.sendTextMessage(senderId, '');
 		}).catch((error) => { console.log(`Error updating user zip: ${JSON.stringify(error)}`); });
 	} else if(!state.comment) {
 		update = { comment: message };
 		exports.updateUser(senderId, update)
 		.then((result) => {
 			exports.updateState(senderId, 'comment');
-			fb.sendTextMessage('All Done!');
+			fb.sendTextMessage(senderId, 'All Done!');
 		}).catch((error) => { console.log(`Error updating user zip: ${JSON.stringify(error)}`); });
 
 	} else {
-		fb.sendTextMessage('We ran into some issues processing your input. Please try again.');
+		fb.sendTextMessage(senderId, 'We ran into some issues processing your input. Please try again.');
 	}
 }
 

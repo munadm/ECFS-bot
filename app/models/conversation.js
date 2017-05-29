@@ -48,7 +48,7 @@ exports.nameIsCorrect = (senderId) => {
 }
 
 exports.nameIsIncorrect = (senderId) => {
-	fb.sendTextMessage('Please enter your first name and last name.');
+	fb.sendTextMessage(senderId, 'Please enter your first name and last name.');
 }
 
 exports.userInUS = (senderId) => {
