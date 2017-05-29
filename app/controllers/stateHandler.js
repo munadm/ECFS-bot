@@ -110,6 +110,7 @@ exports.updateState = (senderId, stateName) => {
 	let update = {};
 	update[stateName] = true;
     const options = { upsert: true,
+    				  new: true,
     				  setDefaultsOnInsert: true };
     State.findOneAndUpdate(query, update, options, (error, result) => {
 		if (error) {
@@ -127,7 +128,7 @@ exports.clearState = (senderId) => {
 			console.log(`Recieved error,removing state ${JSON.stringify(error)}`);
     		return;
 		}
-		console.log(`Removed state: ${result}`);
+		console.log(`Removed state: ${senderId}`);
 	});
 }
 
