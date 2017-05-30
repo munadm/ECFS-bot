@@ -5,3 +5,5 @@ exports.states = ['AK','AL','AR','AZ','CA','CO','CT','DC',
 			'NM','NV','NY', 'OH','OK','OR','PA','PR','PW',
 			'RI','SC','SD','TN','TX','UT','VA','VI','VT','WA',
 			'WI','WV','WY'];
+
+exports.proceeding = [{ name:"17-108", description: "Restoring Internet Freedom", id_proceeding:"301759"}];

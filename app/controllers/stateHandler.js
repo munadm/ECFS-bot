@@ -54,6 +54,7 @@ exports.handleState = (message, senderId, state) => {
 		}).catch((error) => { console.log(`Error updating user city: ${JSON.stringify(error)}`); });
 
 	} else if(!state.state && message) {
+		message = message.toUpperCase();
 		if(!isValidState(message)) {
 			fb.sendTextMessage(senderId, `I'm sorry we only support US addresses with 5 digit zip codes.`);
 			return;
@@ -74,14 +75,14 @@ exports.handleState = (message, senderId, state) => {
 		exports.updateUser(senderId, update)
 		.then((result) => {
 			exports.updateState(senderId, 'zip');
-			fb.sendTextMessage(senderId, '');
+			fb.sendTextMessage(senderId, 'Enter your comment below.');
 		}).catch((error) => { console.log(`Error updating user zip: ${JSON.stringify(error)}`); });
 	} else if(!state.comment) {
 		update = { comment: message };
 		exports.updateUser(senderId, update)
 		.then((result) => {
 			exports.updateState(senderId, 'comment');
-			fb.sendTextMessage(senderId, 'All Done!');
+			cv.finalizeConversation(senderId);
 		}).catch((error) => { console.log(`Error updating user zip: ${JSON.stringify(error)}`); });
 
 	} else {
@@ -93,8 +94,7 @@ function isValidState(state) {
 	if(state.length > 2) {
 		return false;
 	}
-	const searchableState = state.toUpperCase();
-	if(!(_.contains(constants.states, searchableState)) ) {
+	if(!(_.contains(constants.states, state)) ) {
 		return false;
 	}
 	return true;

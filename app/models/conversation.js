@@ -23,6 +23,48 @@ exports.initializeConversation = (senderId) => {
     	});
 };
 
+exports.finalizeConversation = (senderId) => {
+	fcc.sendComment(senderId)
+		.then((response) => {
+			console.log(`Response from FCC API is: ${response}`);
+			if(response.status && response.status === 'RECEIVED') {
+				fb.sendTextMessage(senderId, 'Looks like you\'re all set! Thank you for participating!');
+			} else {
+				fb.sendTextMessage(senderId, 'Looks like something went wrong trying to submit. You can still send a comment here: https://www.fcc.gov/ecfs/search/proceedings?q=name:((17-108))');
+			}
+			const query = { fb_id: senderId };
+			User.findOneAndRemove(query, (error, result) => {
+				if (error) {
+					console.log(`Recieved error,removing user ${JSON.stringify(error)}`);
+	    			return;
+				}
+				console.log(`Removed user: ${senderId}`);
+			});
+		})
+		.catch((error) => { 
+      		console.log(`Error sending comment to fcc messages: ${error}`); 
+    	});
+}
+
+exports.restartConversation = (senderId) => {
+	const query = { fb_id: senderId };
+	User.findOneAndRemove(query, (error, result) => {
+		if (error) {
+			console.log(`Recieved error,removing user ${JSON.stringify(error)}`);
+			return;
+		}
+		console.log(`Removed user: ${senderId}`);
+		State.findOneAndRemove(query, (error, state) => {
+			if(error) {
+				console.log(`Error encountered getting state: ${JSON.stringify(error)}`);
+				return;
+			}
+			console.log(`Removed state: ${senderId}`);
+			exports.initializeConversation(senderId);
+		}); 
+	});
+}
+
 exports.nameIsCorrect = (senderId) => {
 	const replyOptions = {
 		Yes : 'IN_US',

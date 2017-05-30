@@ -4,10 +4,10 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   fb_id: { type: String, required: true, unique: true },
   name: String,
-  adresss: String,
+  address: String,
   zip: { type: String, maxlength: 9 },
   city: String,
-  state: String,
+  state: { type: String, maxlength: 2 },
   isInternational: { type: Boolean, default: false },
   created_at: Date,
   updated_at: Date

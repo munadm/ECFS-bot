@@ -28,6 +28,8 @@ exports.postbackHandler = (event, senderId) => {
 		cv.initializeConversation(senderId);
 	} else if (payload === 'FAQ_DATA_USE') {
 		fb.sendTextMessage(senderId, 'Great Question! Though we are storing your data in order to prepare your comment we will delete it right after you confirm to submit your comment.')
+	} else if (payload === 'RESTART_CONV') {
+		cv.restartConversation(senderId);
 	} else {
 		console.log(`Recieved unexpected payload ${payload}`)
 	}
